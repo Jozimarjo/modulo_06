@@ -63,7 +63,6 @@ export default class Main extends Component {
             bio: response.data.bio,
             avatar: response.data.avatar_url,
         };
-        console.tron.log(data);
 
         this.setState({
             users: [...users, data],
@@ -77,8 +76,6 @@ export default class Main extends Component {
         navigation.navigate('User', { user });
     };
     render() {
-        console.tron.log('data');
-
         const { users, newUser, loading } = this.state;
         return (
             <Container>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 import {
     Container,
@@ -16,6 +17,7 @@ import {
     OwnerAvatar,
 } from './styles';
 
+import { ProfileButton, ProfileButtonText } from '../Main/styles';
 import api from '../../services/api';
 
 // import { Container } from './styles';
@@ -77,11 +79,9 @@ export default class User extends Component {
     };
 
     refreshList = async () => {
-        console.tron.log('refsh foi chamado ', this.state.loading);
-
         const { navigation } = this.props;
 
-        const { stars, page } = this.state;
+        const { page } = this.state;
 
         const user = navigation.getParam('user');
         this.setState({ loading: true });
@@ -100,6 +100,10 @@ export default class User extends Component {
         });
     };
 
+    handleNavigate = () => {
+        console.tron.log('handle foi chamado == ');
+    };
+
     render() {
         const { navigation } = this.props;
         const { stars, loading } = this.state;
@@ -111,6 +115,9 @@ export default class User extends Component {
                     <Name>{user.name}</Name>
                     <Bio> {user.bio} </Bio>
                 </Header>
+                <ProfileButton onPress={this.handleNavigate}>
+                    <ProfileButtonText>Ver teste</ProfileButtonText>
+                </ProfileButton>
                 {loading ? (
                     <ActivityIndicator color="#7159c1" />
                 ) : (
@@ -122,14 +129,26 @@ export default class User extends Component {
                         data={stars}
                         keyExtractor={star => String(star.id)}
                         renderItem={({ item }) => (
-                            <Starred>
+                            <Starred onPress={this.handleNavigate}>
                                 <OwnerAvatar
+                                    onPress={this.handleNavigate}
                                     source={{ uri: item.owner.avatar_url }}
                                 />
-                                <Info>
+                                <Info onPress={this.handleNavigate}>
                                     <Title> {item.name} </Title>
                                     <Author> {item.owner.login} </Author>
                                 </Info>
+                                <ProfileButton
+                                    onPress={() =>
+                                        navigation.navigate('Repository', {
+                                            item: item.html_url,
+                                        })
+                                    }
+                                >
+                                    <ProfileButtonText>
+                                        Ver teste
+                                    </ProfileButtonText>
+                                </ProfileButton>
                             </Starred>
                         )}
                     />
